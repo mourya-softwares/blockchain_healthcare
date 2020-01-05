@@ -17,7 +17,7 @@ exports.assignJWT = function(req, res){
 	res.cookie('token', token, { maxAge: 300 * 1000 });
 }
 
-exports.verifyJWT = function(req){
+exports.verifyJWT = function(req, res){
 	var token = req.cookies.token;
 	// if the cookie is not set, return an unauthorized error
 	if (!token) {
