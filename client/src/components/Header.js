@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import NavMenu from "./NavMenu";
 const HeaderContainer = styled.header`
   overflow: auto;
   padding: 6px 12px;
@@ -24,12 +24,21 @@ const HamBurgerChild = styled.div`
 `;
 
 function HamBurgerIcon() {
+  let [MenuState, SetMenuState] = React.useState(false);
+
+  let toggleMenu = () => {
+    SetMenuState(!MenuState);
+  };
+
   return (
-    <HamBurgerWrapper>
-      <HamBurgerChild></HamBurgerChild>
-      <HamBurgerChild></HamBurgerChild>
-      <HamBurgerChild></HamBurgerChild>
-    </HamBurgerWrapper>
+    <>
+      <HamBurgerWrapper onClick={toggleMenu}>
+        <HamBurgerChild></HamBurgerChild>
+        <HamBurgerChild></HamBurgerChild>
+        <HamBurgerChild></HamBurgerChild>
+      </HamBurgerWrapper>
+      {MenuState ? <NavMenu /> : null}
+    </>
   );
 }
 
@@ -41,7 +50,6 @@ class Header extends React.Component {
           <BrandName>BlockChain</BrandName>
           <HamBurgerIcon />
         </HeaderContainer>
-        <h1>Header</h1>
       </>
     );
   }

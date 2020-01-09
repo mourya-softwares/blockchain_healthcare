@@ -1,11 +1,11 @@
 const Transaction = require("./transaction");
 const crypto = require("crypto");
 class Block {
-  constructor(index, transaction, previousProof, previousBlockHash) {
+  constructor(index, transaction, proof, previousBlockHash) {
     this.index = index;
     this.transaction = transaction;
     this.previousBlockHash = previousBlockHash;
-    this.previousProof = previousProof;
+    this.proof = proof;
     this.timestamp = Date.now();
   }
   hashValue() {
@@ -20,7 +20,7 @@ class Block {
   setProof(proof) {
     this.proof = proof;
   }
-  getProof(proof) {
+  getProof() {
     return this.proof;
   }
   getIndex() {
@@ -30,13 +30,13 @@ class Block {
     return this.previousBlockHash;
   }
   getDetails() {
-    const { index, proof, previousBlockHash, transactions, timestamp } = this;
+    const { index, proof, previousBlockHash, transaction, timestamp } = this;
     console.warn("warn", this);
     return {
       index,
       proof,
       previousBlockHash,
-      transactions: transactions.map(transaction => transaction.getDetails()),
+      transaction: transaction.getDetails(),
       timestamp
     };
   }
@@ -45,14 +45,12 @@ class Block {
     this.proof = block.proof;
     this.previousBlockHash = block.previousBlockHash;
     this.timestamp = block.timestamp;
-    this.transactions = block.transactions.map(transaction => {
-      const parsedTransaction = new Transaction();
-      parsedTransaction.parseTransaction(transaction);
-      return parsedTransaction;
-    });
+    const parsedTransaction = new Transaction();
+    parsedTransaction.parseTransaction(block.transaction);
+    this.transaction = parsedTransaction;
   }
   printTransaction() {
-    this.transactions.forEach(transaction => console.log(transaction));
+    console.log(this.transaction);
   }
 }
 

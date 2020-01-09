@@ -1,11 +1,11 @@
-const Block = require("./block");
+let Block = require("./block");
 const actions = require("../constants/actions");
+let Transaction = require("./transaction");
 const { generateProof, isProofValid } = require("../utils/proof");
 
 class BlockChain {
   constructor(blocks, io) {
-    this.blocks = blocks || [new Block(0, [], 1, 0)];
-    this.currentTransactions = [];
+    this.blocks = blocks || [new Block(0, new Transaction(), 1, 0)];
     this.nodes = [];
     this.io = io;
   }
@@ -21,23 +21,23 @@ class BlockChain {
   }
 
   async newTransaction(transaction) {
-    this.currentTransactions.push(transaction);
-    if (this.currentTransactions.length === 2) {
-      console.info("Starting mining block...");
-      const previousBlock = this.lastBlock();
-      process.env.BREAK = false;
-      const block = new Block(
-        previousBlock.getIndex() + 1,
-        this.currentTransactions,
-        previousBlock.getProof(),
-        previousBlock.hashValue()
-      );
-      const { proof, dontMine } = await generateProof(previousBlock.getProof());
-      block.setProof(proof);
-      this.currentTransactions = [];
-      if (dontMine !== "true") {
-        this.mineBlock(block);
-      }
+    console.log("transaction started", process.env.BREAK, "break");
+    console.info("Starting mining block...");
+    const previousBlock = this.lastBlock();
+    process.env.BREAK = false;
+    const block = new Block(
+      previousBlock.getIndex() + 1,
+      transaction,
+      previousBlock.getProof(),
+      previousBlock.hashValue()
+    );
+    console.log("generate proof");
+    const { proof, dontMine } = await generateProof(previousBlock.getProof());
+    console.log("set proof");
+    block.setProof(proof);
+    console.log("proof done");
+    if (dontMine !== "true") {
+      this.mineBlock(block);
     }
   }
 

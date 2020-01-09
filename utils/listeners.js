@@ -12,7 +12,7 @@ const listeners = (socket, chain) => {
         transaction.getDetails(),
         null,
         "\t"
-      )} ${chain}`
+      )}`
     );
   });
 

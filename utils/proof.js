@@ -1,10 +1,17 @@
 const crypto = require("crypto");
 
-const generateProof = previousProof =>
-  new Promise(resolve => {
+const generateProof = previousProof => {
+  console.log("inside generateProof");
+  return new Promise(resolve => {
+    console.log("inside generateProof promise");
     setImmediate(async () => {
       let proof = Math.random() * 10000000001;
       const dontMine = process.env.Break;
+      console.log(
+        proof,
+        "inside generateProof promise",
+        isProofValid(previousProof, proof)
+      );
       if (isProofValid(previousProof, proof) || dontMine === "true") {
         resolve({ proof, dontMine });
       } else {
@@ -12,6 +19,7 @@ const generateProof = previousProof =>
       }
     });
   });
+};
 
 const isProofValid = (previousProof, currentProof) => {
   const difference = currentProof - previousProof;
@@ -19,7 +27,8 @@ const isProofValid = (previousProof, currentProof) => {
   const hashFunction = crypto.createHash("sha256");
   hashFunction.update(proofString);
   const hexString = hashFunction.digest("hex");
-  if (hexString.includes("000000")) {
+  console.log(hexString, proofString, difference);
+  if (hexString.includes("0")) {
     return true;
   }
   return false;
