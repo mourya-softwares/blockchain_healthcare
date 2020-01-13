@@ -3,19 +3,12 @@ var app = express();
 var httpServer = require("http").Server(app);
 var io = require("socket.io")(httpServer);
 var router = express.Router();
-let BlockChain = require("./models/chain");
-let blockChain = new BlockChain(null, io);
+//let cluster = require("cluster");
 
 exports.router = router;
 exports.app = app;
+/*exports.cluster = () => {
+  return cluster;
+};*/
 exports.io = io;
 exports.httpServer = httpServer;
-exports.blockChain = {
-  get: function() {
-    return blockChain;
-  },
-  addNode: function(socketNode) {
-    blockChain.addNode(socketNode);
-    console.log(blockChain);
-  }
-};

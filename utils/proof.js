@@ -1,17 +1,10 @@
 const crypto = require("crypto");
 
 const generateProof = previousProof => {
-  console.log("inside generateProof");
   return new Promise(resolve => {
-    console.log("inside generateProof promise");
     setImmediate(async () => {
       let proof = Math.random() * 10000000001;
       const dontMine = process.env.Break;
-      console.log(
-        proof,
-        "inside generateProof promise",
-        isProofValid(previousProof, proof)
-      );
       if (isProofValid(previousProof, proof) || dontMine === "true") {
         resolve({ proof, dontMine });
       } else {

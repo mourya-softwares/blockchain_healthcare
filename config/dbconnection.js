@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
-const dbRoute =
-  "mongodb+srv://vijay:vijaymourya@cluster0-nsvjo.mongodb.net/test?retryWrites=true&w=majority";
+const dbRoute = process.env.MONGO_API;
 
 mongoose.connect(dbRoute, { useUnifiedTopology: true, useNewUrlParser: true });
 

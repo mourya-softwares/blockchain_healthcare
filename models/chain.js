@@ -1,11 +1,16 @@
 let Block = require("./block");
 const actions = require("../constants/actions");
 let Transaction = require("./transaction");
+//const globals = require("../globals");
+//const cluster = globals.cluster();
+
 const { generateProof, isProofValid } = require("../utils/proof");
+
+const GenesisBlock = [new Block(0, new Transaction(), 1, 0)]; // The first block of the blockchain
 
 class BlockChain {
   constructor(blocks, io) {
-    this.blocks = blocks || [new Block(0, new Transaction(), 1, 0)];
+    this.blocks = blocks || GenesisBlock;
     this.nodes = [];
     this.io = io;
   }
@@ -17,11 +22,14 @@ class BlockChain {
   mineBlock(block) {
     this.blocks.push(block);
     console.log("Mined Successfully");
-    this.io.emit(actions.END_MINING, this.toArray());
+    this.io.emit(actions.END_MINING, {
+      newChain: this.toArray(),
+      newBlock: block
+      //workerId: cluster.worker.id
+    });
   }
 
   async newTransaction(transaction) {
-    console.log("transaction started", process.env.BREAK, "break");
     console.info("Starting mining block...");
     const previousBlock = this.lastBlock();
     process.env.BREAK = false;
@@ -33,7 +41,6 @@ class BlockChain {
     );
     console.log("generate proof");
     const { proof, dontMine } = await generateProof(previousBlock.getProof());
-    console.log("set proof");
     block.setProof(proof);
     console.log("proof done");
     if (dontMine !== "true") {
@@ -55,14 +62,17 @@ class BlockChain {
     for (let index = 1; index < blocks.length; index++) {
       const currentBlock = blocks[index];
       if (currentBlock.getPreviousBlockHash() !== previousBlock.hashValue()) {
-        return false;
+        return { success: false, alteredBlock: currentBlock };
       }
       if (!isProofValid(previousBlock.getProof(), currentBlock.getProof())) {
-        return false;
+        return { success: false, alteredBlock: currentBlock };
+      }
+      if (currentBlock.index == previousBlock.index + 1) {
+        return { success: false, alteredBlock: currentBlock };
       }
       previousBlock = currentBlock;
     }
-    return true;
+    return { success: true };
   }
 
   parseChain(blocks) {
@@ -74,7 +84,6 @@ class BlockChain {
   }
   toArray() {
     return this.blocks.map(block => {
-      console.warn(block);
       return block.getDetails();
     });
   }

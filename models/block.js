@@ -31,7 +31,6 @@ class Block {
   }
   getDetails() {
     const { index, proof, previousBlockHash, transaction, timestamp } = this;
-    console.warn("warn", this);
     return {
       index,
       proof,
