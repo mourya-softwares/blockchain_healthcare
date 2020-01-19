@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 const NavContainer = styled.ul`
   position: absolute;
@@ -22,17 +21,57 @@ const NavItems = styled.li`
   letter-spacing: 2px;
 `;
 
-function NavMenu() {
-  return (
-    <NavContainer>
-      <NavItems>Home</NavItems>
-      <NavItems>
-        <Link to="/login/">Login</Link>
-      </NavItems>
-      <NavItems>Data</NavItems>
-      <NavItems>Contact Us</NavItems>
-    </NavContainer>
-  );
+class NavMenu extends React.Component {
+  constructor() {
+    super();
+    this.loginDetails = null;
+  }
+  UNSAFE_componentWillMount() {
+    this.loginDetails = localStorage.getItem("userInfo");
+  }
+  handleLogout = () => {
+    this.props.toggleMenu();
+    localStorage.removeItem("userInfo");
+    window.location.href = "/login/";
+  };
+  handleClick = event => {
+    event.preventDefault();
+    this.props.toggleMenu();
+    window.location.href = event.currentTarget.href;
+  };
+  render() {
+    return (
+      <NavContainer>
+        {!this.loginDetails ? (
+          <NavItems key="2">
+            <a href="/login/" onClick={this.handleClick}>
+              Login
+            </a>
+          </NavItems>
+        ) : (
+          <>
+            <NavItems key="2">
+              <a href="/dashboard/" onClick={this.handleClick}>
+                Dashboard
+              </a>
+            </NavItems>
+            <NavItems key="3" onClick={this.handleLogout}>
+              Logout
+            </NavItems>
+          </>
+        )}
+
+        <NavItems key="4">
+          <a href="/data/" onClick={this.handleClick}>
+            Data
+          </a>
+        </NavItems>
+        <NavItems key="5" onClick={this.handleClick}>
+          Contact Us
+        </NavItems>
+      </NavContainer>
+    );
+  }
 }
 
 export default NavMenu;

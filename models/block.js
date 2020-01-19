@@ -12,7 +12,7 @@ class Block {
     const { index, proof, transaction, timestamp } = this;
     const blockString = `${index}-${proof}-${JSON.stringify(
       transaction
-    )}-${timestamp}`;
+    )}-${timestamp.valueOf()}`;
     const hashFunction = crypto.createHash("sha256");
     hashFunction.update(blockString);
     return hashFunction.digest("hex");
@@ -43,7 +43,7 @@ class Block {
     this.index = block.index;
     this.proof = block.proof;
     this.previousBlockHash = block.previousBlockHash;
-    this.timestamp = block.timestamp;
+    this.timestamp = block.timestamp.valueOf();
     const parsedTransaction = new Transaction();
     parsedTransaction.parseTransaction(block.transaction);
     this.transaction = parsedTransaction;

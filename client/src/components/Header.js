@@ -33,11 +33,11 @@ function HamBurgerIcon() {
   return (
     <>
       <HamBurgerWrapper onClick={toggleMenu}>
-        <HamBurgerChild></HamBurgerChild>
-        <HamBurgerChild></HamBurgerChild>
-        <HamBurgerChild></HamBurgerChild>
+        <HamBurgerChild key="1"></HamBurgerChild>
+        <HamBurgerChild key="2"></HamBurgerChild>
+        <HamBurgerChild key="3"></HamBurgerChild>
       </HamBurgerWrapper>
-      {MenuState ? <NavMenu /> : null}
+      {MenuState ? <NavMenu toggleMenu={toggleMenu} /> : null}
     </>
   );
 }

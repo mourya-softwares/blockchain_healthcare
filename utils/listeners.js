@@ -2,6 +2,7 @@ const actions = require("../constants/actions");
 //const cluster = require("../globals").cluster();
 const Transaction = require("../models/transaction");
 const BlockChain = require("../models/chain");
+const chainRepo = require("../dal/chainRepo");
 
 const listeners = (socket, chain) => {
   socket.on(actions.ADD_TRANSACTION, (doctor, patient, details) => {
@@ -16,7 +17,7 @@ const listeners = (socket, chain) => {
     );*/
   });
 
-  socket.on(actions.END_MINING, ({ newChain, newBlock }) => {
+  socket.on(actions.END_MINING, async ({ newChain, newBlock }) => {
     console.log("End Mining encountered");
     process.env.Break = true;
     const blockChain = new BlockChain();
@@ -24,6 +25,7 @@ const listeners = (socket, chain) => {
     var validity = blockChain.checkValidity();
     if (validity.success && blockChain.getLength() >= chain.getLength()) {
       chain.blocks = blockChain.blocks;
+      await chainRepo.addBlock(newBlock);
       //TODO: save newBlock in db
     } else {
       console.log("altered Block", validity.alteredBlock);

@@ -1,10 +1,6 @@
 var jwt = require("jsonwebtoken");
 const jwtKey = "7";
 exports.assignJWT = function(req, res) {
-  var user = {
-    user1: "1234",
-    user2: "1234"
-  };
   const { username, password } = req.body;
   var token = jwt.sign({ username: username }, jwtKey, {
     algorithm: "HS256",
@@ -22,7 +18,6 @@ exports.verifyJWT = function(req, res) {
   if (!token) {
     return { status: 401 };
   }
-  var payload;
   try {
     // Parse the JWT string and store the result in `payload`.
     // Note that we are passing the key in this method as well. This method will throw an error

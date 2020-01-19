@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const Input = styled.input`
   display: block;
-  text-align: center;
   padding: 0.75em;
   margin: 1em auto;
   color: palevioletred;
@@ -11,6 +10,9 @@ const Input = styled.input`
   border: none;
   border-radius: 3px;
   font-size: 16px;
+  &::placeholder {
+    padding-left: ${props => (props.placeholderPL ? props.placeholderPL : "0")};
+  }
 `;
 
 const Button = styled.button`
@@ -45,7 +47,7 @@ const apiRoute = {
   1: "/register/"
 };
 
-function LoginPage() {
+function DoctorLoginPage() {
   let [Page, SetPage] = React.useState(0);
   const username = React.useRef(null);
   const password = React.useRef(null);
@@ -55,37 +57,32 @@ function LoginPage() {
   };
 
   let handleLoginRegister = () => {
-    if (
-      username.current &&
-      password.current &&
-      (Page === 0 || (Page === 1 && name.current))
-    )
-      fetch(apiRoute[Page], {
-        method: "POST",
-        body: JSON.stringify({
-          name: name.current ? name.current.value : "",
-          username: username.current.value,
-          password: password.current.value,
-          role: 2
-        }),
-        headers: {
-          "content-type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(response => {
-          if (response.success) {
-            if (Page === 1) {
-              alert("Successfully registered! Please login to continue.");
-              SetPage(0);
-            } else {
-              localStorage.setItem("userInfo", JSON.stringify(response));
-              window.location.href = "/dashboard/";
-            }
+    fetch(apiRoute[Page], {
+      method: "POST",
+      body: JSON.stringify({
+        name: name.current ? `Dr. ${name.current.value}` : "",
+        username: username.current.value,
+        password: password.current.value,
+        role: 1
+      }),
+      headers: {
+        "content-type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(response => {
+        if (response.success) {
+          if (Page === 1) {
+            alert("Successfully registered! Please login to continue.");
+            SetPage(0);
           } else {
-            alert(response.message);
+            localStorage.setItem("userInfo", JSON.stringify(response));
+            window.location.href = "/dashboard/";
           }
-        });
+        } else {
+          alert(response.message);
+        }
+      });
   };
 
   return (
@@ -99,9 +96,7 @@ function LoginPage() {
           Register
         </TabButton>
       </Flex>
-      {Page === 1 && (
-        <Input type="text" ref={name} placeholder="Enter name" required />
-      )}
+      {Page === 1 && <Input type="text" ref={name} placeholder="Enter name" />}
       <Input type="text" ref={username} placeholder="Enter username" />
       <Input type="text" ref={password} placeholder="Enter password" />
       <Button onClick={handleLoginRegister}>{LoginRegisterLabel[Page]}</Button>
@@ -109,4 +104,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default DoctorLoginPage;
