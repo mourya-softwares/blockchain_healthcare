@@ -82,9 +82,6 @@ class NavMenu extends React.Component {
             Data
           </a>
         </NavItems>
-        <NavItems key="7" onClick={this.handleClick}>
-          Contact Us
-        </NavItems>
       </NavContainer>
     );
   }
