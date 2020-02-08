@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
     "server": "node server",
     "debug-server": "node --inspect-brk server",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
     "debug": "concurrently \"npm run debug-server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
