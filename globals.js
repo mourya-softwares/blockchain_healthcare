@@ -7,6 +7,7 @@ var router = express.Router();
 
 exports.router = router;
 exports.app = app;
+exports.express = express;
 /*exports.cluster = () => {
   return cluster;
 };*/
