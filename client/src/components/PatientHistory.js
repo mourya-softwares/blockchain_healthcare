@@ -52,7 +52,13 @@ const Label = styled.label`
 class PatientHistory extends React.Component {
   constructor() {
     super();
-    this.state = { history: [], patients: [], selectedPatient: "-1" };
+    this.state = {
+      history: [],
+      patients: [],
+      selectedPatient: "-1",
+      message: "No Data Found!!!",
+      showNoFoundMsg: false
+    };
     this.loginDetails = JSON.parse(sessionStorage.getItem("userInfo"));
     this.inputRef = React.createRef();
   }
@@ -63,17 +69,21 @@ class PatientHistory extends React.Component {
   }
   componentDidMount() {
     let self = this;
-    fetch("/usersByRole/?role=2")
-      .then(res => res.json())
-      .then(response => {
-        console.log(response);
-        self.setState({ patients: response.users });
-      });
+    if (this.loginDetails.role === 1) {
+      fetch("/usersByRole/?role=2")
+        .then(res => res.json())
+        .then(response => {
+          console.log(response);
+          self.setState({ patients: response.users });
+        });
+    } else {
+      this.fetchPatientData(this.loginDetails.username);
+    }
   }
-  handleChange = event => {
-    this.setState({ selectedPatient: event.target.value });
+
+  fetchPatientData = patient => {
     let self = this;
-    fetch("/patientHistory/?patient=" + event.target.value)
+    fetch("/patientHistory/?patient=" + patient)
       .then(res => res.json())
       .then(response => {
         console.log(response);
@@ -88,22 +98,35 @@ class PatientHistory extends React.Component {
           });
           console.log(history);
           self.setState({ history: history });
+        } else {
+          self.setState({ history: [], showNoFoundMsg: true });
         }
       });
   };
+
+  handleChange = event => {
+    this.setState({ selectedPatient: event.target.value });
+    this.fetchPatientData(event.target.value);
+  };
+
   render() {
     return (
       <Container>
         <h2>Hello {this.loginDetails.name}</h2>
-        <p>Please select the patient to proceed.</p>
-        <Select onChange={this.handleChange} defaultValue="-1">
-          <option value="-1">Select Patient</option>
-          {this.state.patients.map(obj => (
-            <option value={obj.username} key={obj.name}>
-              {obj.name}
-            </option>
-          ))}
-        </Select>
+        {this.loginDetails.role === 1 && (
+          <>
+            <p>Please select the patient to proceed.</p>
+            <Select onChange={this.handleChange} defaultValue="-1">
+              <option value="-1">Select Patient</option>
+              {this.state.patients.map(obj => (
+                <option value={obj.username} key={obj.name}>
+                  {obj.name}
+                </option>
+              ))}
+            </Select>
+          </>
+        )}
+        {this.state.showNoFoundMsg && <div>{this.state.message}</div>}
         <UL>
           {this.state.history.map((transaction, index) => (
             <Li key={index + 1}>

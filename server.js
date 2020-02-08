@@ -46,10 +46,7 @@ io.on("connection", socket => {
 });
 
 blockChain.addNode(
-  listeners(
-    client(`http://localhost:${process.env.PORT || properties.PORT}`),
-    blockChain.get()
-  )
+  listeners(client(`http://localhost:${properties.PORT}`), blockChain.get())
 );
 
 /*if (cluster.isMaster) {
@@ -61,7 +58,7 @@ blockChain.addNode(
     console.log(`The Worker number: ${worker.id} has died`);
   });
 } else {*/
-httpServer.listen(process.env.PORT || properties.PORT, () => {
+httpServer.listen(properties.PORT, () => {
   console.log("connected on port: " + properties.PORT);
   //console.log(`The Worker number: ${cluster.worker.id} is running`);
 });

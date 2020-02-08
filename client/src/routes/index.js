@@ -7,6 +7,7 @@ import DoctorLoginPage from "../components/DoctorLogin";
 import OpenData from "../components/OpenData";
 import Prescription from "../components/Prescription";
 import PatientHistory from "../components/PatientHistory";
+import PatientDashboard from "../components/PatientDashboard";
 
 function AppRoutes() {
   return (
@@ -25,6 +26,12 @@ function AppRoutes() {
         key="prescripe"
       />
       <Route exact path="/history/" component={PatientHistory} key="history" />
+      <Route
+        exact
+        path="/patientdashboard/"
+        component={PatientDashboard}
+        key="patientdashboard"
+      />
       <Route exact path="/dashboard/" component={Dashboard} key="dashboard" />
       <Route exact path="/data/" component={OpenData} key="data" />
     </Switch>

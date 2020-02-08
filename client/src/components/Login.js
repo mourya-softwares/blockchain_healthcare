@@ -80,7 +80,9 @@ function LoginPage() {
               SetPage(0);
             } else {
               sessionStorage.setItem("userInfo", JSON.stringify(response));
-              window.location.href = "/dashboard/";
+              if (response.role === 2)
+                window.location.href = "/patientdashboard/";
+              else window.location.href = "/dashboard/";
             }
           } else {
             alert(response.message);

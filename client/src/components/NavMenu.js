@@ -31,7 +31,7 @@ class NavMenu extends React.Component {
     this.loginDetails = null;
   }
   UNSAFE_componentWillMount() {
-    this.loginDetails = sessionStorage.getItem("userInfo");
+    this.loginDetails = JSON.parse(sessionStorage.getItem("userInfo"));
   }
   handleLogout = () => {
     this.props.toggleMenu();
@@ -53,6 +53,13 @@ class NavMenu extends React.Component {
             </a>
           </NavItems>
         ) : (
+          <NavItems key="5">
+            <a href="/history/" onClick={this.handleLogout}>
+              Logout
+            </a>
+          </NavItems>
+        )}
+        {this.loginDetails && this.loginDetails.role === 1 && (
           <>
             <NavItems key="2">
               <a href="/dashboard/" onClick={this.handleClick}>
@@ -67,11 +74,6 @@ class NavMenu extends React.Component {
             <NavItems key="4">
               <a href="/history/" onClick={this.handleClick}>
                 Patient History
-              </a>
-            </NavItems>
-            <NavItems key="5">
-              <a href="/history/" onClick={this.handleLogout}>
-                Logout
               </a>
             </NavItems>
           </>

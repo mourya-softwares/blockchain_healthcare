@@ -13,6 +13,7 @@ exports.authenticateUser = async function(username, password) {
       success: true,
       name: result.name,
       id: result.userId,
+      role: result.role,
       username: result.username
     };
   } catch (err) {
