@@ -19,6 +19,10 @@ const NavItems = styled.li`
   text-align: center;
   padding: 12px 0px;
   letter-spacing: 2px;
+  > a {
+    text-decoration: none;
+    color: violet;
+  }
 `;
 
 class NavMenu extends React.Component {
@@ -27,11 +31,11 @@ class NavMenu extends React.Component {
     this.loginDetails = null;
   }
   UNSAFE_componentWillMount() {
-    this.loginDetails = localStorage.getItem("userInfo");
+    this.loginDetails = sessionStorage.getItem("userInfo");
   }
   handleLogout = () => {
     this.props.toggleMenu();
-    localStorage.removeItem("userInfo");
+    sessionStorage.removeItem("userInfo");
     window.location.href = "/login/";
   };
   handleClick = event => {
@@ -55,18 +59,30 @@ class NavMenu extends React.Component {
                 Dashboard
               </a>
             </NavItems>
-            <NavItems key="3" onClick={this.handleLogout}>
-              Logout
+            <NavItems key="3">
+              <a href="/prescription/" onClick={this.handleClick}>
+                Prescription
+              </a>
+            </NavItems>
+            <NavItems key="4">
+              <a href="/history/" onClick={this.handleClick}>
+                Patient History
+              </a>
+            </NavItems>
+            <NavItems key="5">
+              <a href="/history/" onClick={this.handleLogout}>
+                Logout
+              </a>
             </NavItems>
           </>
         )}
 
-        <NavItems key="4">
+        <NavItems key="6">
           <a href="/data/" onClick={this.handleClick}>
             Data
           </a>
         </NavItems>
-        <NavItems key="5" onClick={this.handleClick}>
+        <NavItems key="7" onClick={this.handleClick}>
           Contact Us
         </NavItems>
       </NavContainer>

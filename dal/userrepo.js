@@ -6,10 +6,15 @@ exports.authenticateUser = async function(username, password) {
       username: username,
       password: password
     });
-    if (result.errors || !result.name) {
+    if (!result || result.errors || !result.name) {
       return { success: false, message: "invalid credentials" };
     }
-    return { success: true, name: result.name, id: result.userId };
+    return {
+      success: true,
+      name: result.name,
+      id: result.userId,
+      username: result.username
+    };
   } catch (err) {
     return { success: false, message: "error occured", error: err };
   }
@@ -34,4 +39,12 @@ exports.registerUser = async function({ name, username, password, role = 2 }) {
     success: true,
     name: name
   };
+};
+
+exports.getAllUsersByRole = async function(role) {
+  let results = await UserModel.find({ role: role });
+  if (results.errors || results.length == 0) {
+    return { success: false, message: "error occured", error: results.errors };
+  }
+  return { success: true, users: results };
 };

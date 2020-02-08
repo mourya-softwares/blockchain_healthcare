@@ -34,6 +34,30 @@ exports.printChain = function(req, res) {
   res.status(200).end();
 };
 
+exports.getAllUsersByRole = async function(req, res) {
+  let users = await userrepo.getAllUsersByRole(req.query.role);
+  res.json(users);
+};
+
+exports.getPatientHistory = async function(req, res) {
+  let query = {
+    "transaction.patient": req.query.patient
+  };
+  let fields = { transaction: 1, index: 1 };
+
+  let chain = await chainRepo.getChain(query, fields);
+  if (chain.success && chain.results.length > 0)
+    return res
+      .json({
+        success: true,
+        data: chain.results.sort((a, b) => b.index - a.index)
+      })
+      .end();
+  else if (chain.success)
+    return res.json({ success: chain.success, message: "No Data Found!!!" });
+  else return res.json({ success: false, message: "No Data Found!!!" });
+};
+
 exports.addNode = function(req, res) {
   var result = jwtAuth.verifyJWT(req, res);
   if (result.status == 200) {

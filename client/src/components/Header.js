@@ -47,7 +47,7 @@ class Header extends React.Component {
     return (
       <>
         <HeaderContainer>
-          <BrandName>BlockChain</BrandName>
+          <BrandName>HealthCare</BrandName>
           <HamBurgerIcon />
         </HeaderContainer>
       </>

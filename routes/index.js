@@ -8,4 +8,6 @@ module.exports = function(router) {
   router.get("/print", controllers.printChain);
   router.post("/transaction", controllers.addTransaction);
   router.get("/chain", controllers.getChain);
+  router.get("/usersByRole", controllers.getAllUsersByRole);
+  router.get("/patientHistory", controllers.getPatientHistory);
 };

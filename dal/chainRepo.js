@@ -1,8 +1,8 @@
 const BlockChainModel = require("../models/mongoose/blockchainModel");
 
-exports.getChain = async function(query = {}) {
+exports.getChain = async function(query = {}, fields = {}) {
   try {
-    let results = await BlockChainModel.find(query).exec();
+    let results = await BlockChainModel.find(query, fields);
     if (!results) {
       return { success: false };
     }

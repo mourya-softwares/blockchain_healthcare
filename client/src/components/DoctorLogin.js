@@ -76,7 +76,7 @@ function DoctorLoginPage() {
             alert("Successfully registered! Please login to continue.");
             SetPage(0);
           } else {
-            localStorage.setItem("userInfo", JSON.stringify(response));
+            sessionStorage.setItem("userInfo", JSON.stringify(response));
             window.location.href = "/dashboard/";
           }
         } else {
